@@ -1,0 +1,399 @@
+#include <IRremote.h>
+
+int remoteInputPin = 2;
+IRrecv receiver(remoteInputPin);
+decode_results results;
+
+int motorRightForward   = 9;
+int motorRightReverse   = 10;
+int motorLeftForward    = 11;
+int motorLeftReverse    = 6;
+
+int action = 0;
+
+void setup() {
+  Serial.begin(19200);
+  receiver.enableIRIn();
+  pinMode(motorRightForward, OUTPUT);
+  pinMode(motorRightReverse, OUTPUT);
+  pinMode(motorLeftForward, OUTPUT);
+  pinMode(motorLeftReverse, OUTPUT);
+}
+
+void forward() {
+  action = 0;
+  digitalWrite(motorRightForward, HIGH);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, HIGH);
+  digitalWrite(motorLeftReverse, LOW);
+}
+
+void reverse() {
+  action = 0;
+  digitalWrite(motorRightForward, LOW);
+  digitalWrite(motorRightReverse, HIGH);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, HIGH);
+}
+
+void left() {
+  action = 0;
+  digitalWrite(motorRightForward, HIGH);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, HIGH);
+}
+
+void right() {
+  action = 0;
+  digitalWrite(motorRightForward, LOW);
+  digitalWrite(motorRightReverse, HIGH);
+  digitalWrite(motorLeftForward, HIGH);
+  digitalWrite(motorLeftReverse, LOW);
+}
+
+void halt() {
+  action = 0;
+  digitalWrite(motorRightForward, LOW);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, LOW);  
+}
+
+void dance() {
+  action = 0;
+ digitalWrite(motorRightForward, HIGH);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, HIGH);  
+} 
+
+void turn() {
+  action = 0;
+  analogWrite(motorRightForward, 255);
+  analogWrite(motorRightReverse, 0);
+  analogWrite(motorLeftForward, 0);
+  analogWrite(motorLeftReverse, 255);  
+  
+}
+
+void left2() {
+
+  digitalWrite(motorRightForward, HIGH);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, HIGH);
+}
+
+void right2() {
+
+  digitalWrite(motorRightForward, LOW);
+  digitalWrite(motorRightReverse, HIGH);
+  digitalWrite(motorLeftForward, HIGH);
+  digitalWrite(motorLeftReverse, LOW);
+}
+
+void leftslow() {
+
+  analogWrite(motorRightForward, 255);
+  analogWrite(motorRightReverse, 0);
+  analogWrite(motorLeftForward, 0);
+  analogWrite(motorLeftReverse, 0);
+}
+
+void rightslow() {
+
+  analogWrite(motorRightForward, 0);
+  analogWrite(motorRightReverse, 0);
+  analogWrite(motorLeftForward, 255);
+  analogWrite(motorLeftReverse, 0);
+}
+
+void leftcircle() {
+
+  analogWrite(motorRightForward, 255);
+  analogWrite(motorRightReverse, 0);
+  analogWrite(motorLeftForward, 128);
+  analogWrite(motorLeftReverse, 0);
+}
+
+void rightcircle() {
+
+  analogWrite(motorRightForward, 128);
+  analogWrite(motorRightReverse, 0);
+  analogWrite(motorLeftForward, 255);
+  analogWrite(motorLeftReverse, 0);
+}
+
+void leftreverse() {
+
+  analogWrite(motorRightForward, 0);
+  analogWrite(motorRightReverse, 255);
+  analogWrite(motorLeftForward, 0);
+  analogWrite(motorLeftReverse, 0);
+}
+
+void rightreverse() {
+
+  analogWrite(motorRightForward, 0);
+  analogWrite(motorRightReverse, 0);
+  analogWrite(motorLeftForward, 0);
+  analogWrite(motorLeftReverse, 255);
+}
+
+void forwardstop() {
+
+  digitalWrite(motorRightForward, HIGH);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, HIGH);
+  digitalWrite(motorLeftReverse, LOW);
+}
+
+void reversestop() {
+  
+  digitalWrite(motorRightForward, LOW);
+  digitalWrite(motorRightReverse, HIGH);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, HIGH);
+}
+void forwardhalt() {
+
+  digitalWrite(motorRightForward, HIGH);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, HIGH);
+  digitalWrite(motorLeftReverse, LOW);
+}
+void halt2() {
+  
+  digitalWrite(motorRightForward, LOW);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, LOW);  
+}
+void reverse2() {
+  
+  digitalWrite(motorRightForward, LOW);
+  digitalWrite(motorRightReverse, HIGH);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, HIGH);
+}
+void halt3() {
+  
+  digitalWrite(motorRightForward, LOW);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, LOW);  
+}
+
+void forwardtime(int len) {
+
+  digitalWrite(motorRightForward, HIGH);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, HIGH);
+  digitalWrite(motorLeftReverse, LOW);
+  delay(len);
+}
+
+void lefttime(int len) {
+
+  digitalWrite(motorRightForward, HIGH);
+  digitalWrite(motorRightReverse, LOW);
+  digitalWrite(motorLeftForward, LOW);
+  digitalWrite(motorLeftReverse, HIGH);
+  delay(len);
+}
+
+void righttime(int len) {
+
+  digitalWrite(motorRightForward, LOW);
+  digitalWrite(motorRightReverse, HIGH);
+  digitalWrite(motorLeftForward, HIGH);
+  digitalWrite(motorLeftReverse, LOW);
+
+  delay(len);
+  
+}
+
+void loop() {
+ 
+
+
+  
+  if (receiver.decode(&results)) {
+    Serial.println(results.value, HEX);
+
+    if (results.value == 0xFDA05F) {
+      Serial.println("FORWARD");
+      forward();
+    } else if (results.value == 0xFDB04F) {
+      Serial.println("REVERSE");
+      reverse();
+    } else if (results.value == 0xFD50AF) {
+      Serial.println("LEFT");
+      left();
+    } else if (results.value == 0xFD10EF) {
+      Serial.println("RIGHT");
+      right();
+    } else if (results.value == 0xFD609F) {
+      Serial.println("HALT");
+      halt();
+    } else if (results.value == 0xFD08F7) {
+      Serial.println("DANCE");
+      dance();
+    } else if (results.value == 0xFD58A7) {
+      Serial.println("no");
+      action = 1;
+    } else if (results.value == 0xFD9867) {
+      Serial.println("noforward");
+      action = 2;
+    } else if (results.value == 0xFD18E7) {
+      Serial.println("circle");
+      action = 3;
+    } else if (results.value == 0xFD6897) {
+      Serial.println("circle");
+      action = 4;
+    } else if (results.value == 0xFDA857) {
+      Serial.println("frontback");
+      action = 5;
+    } else if (results.value == 0xFD28D7) {
+      Serial.println("fronhalt");
+      action = 6;
+    }else if (results.value == 0xFD48B7) {
+      Serial.println("reversehalt");
+      action = 7;
+    }else if (results.value == 0xFD8877) {
+      Serial.println("forwqrs stop back");
+      action = 8;
+    }else if (results.value == 0xFD30CF) {
+      Serial.println("forwqrdrightleft");
+      action = 9;
+
+    }
+    receiver.resume();
+  }
+
+if (action == 1) {
+  if ((millis()/1000)%2 == 0) {
+   right2();
+  }
+  else {
+  left2();
+  
+  }
+
+  
+}
+
+if (action == 2) {
+  if ((millis()/600)%2 == 0) {
+   rightslow();
+  }
+   else {
+  leftslow();
+  
+   }
+
+  
+}
+
+if (action == 3) {
+  if ((millis()/1000)%2 == 0) {
+   rightcircle();
+  }
+   else {
+  leftcircle();
+  
+   }
+
+  
+}
+
+if (action == 4) {
+  if ((millis()/1000)%2 == 0) {
+  rightreverse();
+  }
+  else {
+  leftreverse();
+  
+  }
+
+  
+}
+
+if (action == 5) {
+  if ((millis()/5000)%2 == 0) {
+  forwardstop();
+  }
+  else {
+  reversestop();
+  
+  }
+
+  
+}
+
+if (action == 6) {
+  if ((millis()/5000)%2 == 0) {
+  forwardhalt();
+  }
+  else {
+  halt2();
+  }
+  }
+
+
+if (action == 7) {
+  if ((millis()/5000)%2 == 1) {
+  reverse2();
+  }
+  else {
+  halt3();
+  
+  }
+
+
+  
+}
+
+
+if (action == 8) {
+  if ((millis()/2000)%4 == 1) {
+  reverse2();
+  }
+  
+  else if ((millis()/2000)%4 == 3) {
+  forwardhalt();
+  }
+
+  else {
+  halt3();
+  
+  }
+
+
+  
+}
+
+if (action == 9) {
+  
+  forwardtime(5000);
+  righttime(3000);
+  forwardtime(5000);
+  lefttime(3000);
+  forwardtime(5000);
+  halt();=
+  }
+
+
+
+//end void  
+}
+
+//FORWARD-FDA05F
+//BAKCWARD-FDB04F
+//RIGHT-FD50AF
+//LEFT-FD10EF
+//HALT-FD609F
+//TURN-FD8877 
+//     -FD18E7
+
